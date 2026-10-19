@@ -1,10 +1,12 @@
 package com.fujitsu.app.service;
 
 import com.fujitsu.app.domain.Observation;
+import com.fujitsu.app.domain.exception.AppException;
 import com.fujitsu.app.dto.ObservationDto;
 import com.fujitsu.app.dto.WeatherDataDto;
 import com.fujitsu.app.repository.CityRepository;
 import com.fujitsu.app.repository.ObservationRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tools.jackson.dataformat.xml.XmlMapper;
@@ -75,7 +77,7 @@ public class ObservationService {
             saveObservations(data);
 
         } catch (Exception ex) {
-            throw new RuntimeException("Error fetching data: " + ex.getMessage());
+            throw new AppException("Error fetching data: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -92,7 +94,7 @@ public class ObservationService {
     private void saveObservation(ObservationDto dto, String cityName, Long timestamp) {
         Long cityId = cityRepository
                 .findByName(cityName)
-                .orElseThrow(() -> new RuntimeException("Missing city with name: " + cityName))
+                .orElseThrow(() -> new AppException("Missing city: " + cityName, HttpStatus.INTERNAL_SERVER_ERROR))
                 .getId();
 
         Observation observation = new Observation();

@@ -1,11 +1,11 @@
 package com.fujitsu.app.service;
 
+import com.fujitsu.app.domain.exception.AppException;
 import com.fujitsu.app.repository.CityRepository;
 import com.fujitsu.app.repository.RegionalBaseFeeRepository;
 import com.fujitsu.app.repository.VehicleTypeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Service for performing delivery fee calculations.
@@ -40,17 +40,17 @@ public class DeliveryFeeService {
     public Double calculateDeliveryFee(String city, String vehicle) {
         Long cityId = cityRepository
                 .findByName(city.toUpperCase())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST))
+                .orElseThrow(() -> new AppException("Invalid city name", HttpStatus.BAD_REQUEST))
                 .getId();
 
         Long vehicleTypeId = vehicleTypeRepository
                 .findByName(vehicle.toUpperCase())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST))
+                .orElseThrow(() -> new AppException("Invalid vehicle type", HttpStatus.BAD_REQUEST))
                 .getId();
 
         return regionalBaseFeeRepository
                 .findByCityIdAndVehicleId(cityId, vehicleTypeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .orElseThrow(() -> new AppException("No regional fee found", HttpStatus.NOT_FOUND))
                 .getAmount();
     }
 }

@@ -1,12 +1,12 @@
 package com.fujitsu.app.service;
 
 import com.fujitsu.app.domain.RegionalBaseFee;
+import com.fujitsu.app.domain.exception.AppException;
 import com.fujitsu.app.repository.CityRepository;
 import com.fujitsu.app.repository.RegionalBaseFeeRepository;
 import com.fujitsu.app.repository.VehicleTypeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +54,8 @@ public class RegionalFeeService {
      * @param id unique identifier of the object
      * @return regional base fee with the given id if it exists
      */
-    public RegionalBaseFee getById(Long id) {
-        return regionalBaseFeeRepository
-                .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public Optional<RegionalBaseFee> getById(Long id) {
+        return regionalBaseFeeRepository.findById(id);
     }
 
     /**
@@ -71,7 +69,7 @@ public class RegionalFeeService {
         validateVehicleType(fee.getVehicleTypeId());
 
         if (getExisting(fee.getCityId(), fee.getVehicleTypeId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new AppException("Another regional fee with given city and vehicle exists", HttpStatus.BAD_REQUEST);
         }
         return regionalBaseFeeRepository.save(fee).getId();
     }
@@ -85,7 +83,7 @@ public class RegionalFeeService {
     public void update(Long id, RegionalBaseFee fee) {
         RegionalBaseFee fromDb = regionalBaseFeeRepository
                 .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException("No regional fee with given id", HttpStatus.NOT_FOUND));
 
         validateCity(fee.getCityId());
         validateVehicleType(fee.getVehicleTypeId());
@@ -93,7 +91,7 @@ public class RegionalFeeService {
         Optional<RegionalBaseFee> existing = getExisting(fee.getCityId(), fee.getVehicleTypeId());
 
         if (existing.isPresent() && !existing.get().getId().equals(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new AppException("Another regional fee with given city and vehicle exists", HttpStatus.BAD_REQUEST);
         }
         fromDb.setAmount(fee.getAmount());
         fromDb.setCityId(fee.getCityId());
@@ -109,7 +107,7 @@ public class RegionalFeeService {
      */
     public void delete(Long id) {
         if (regionalBaseFeeRepository.findById(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new AppException("No regional fee with given id", HttpStatus.NOT_FOUND);
         }
         regionalBaseFeeRepository.deleteById(id);
     }
@@ -117,13 +115,13 @@ public class RegionalFeeService {
     private void validateCity(Long id) {
         cityRepository
                 .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new AppException("Invalid city id", HttpStatus.BAD_REQUEST));
     }
 
     private void validateVehicleType(Long id) {
         vehicleTypeRepository
                 .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new AppException("Invalid vehicle type id", HttpStatus.BAD_REQUEST));
     }
 
     private Optional<RegionalBaseFee> getExisting(Long cityId, Long vehicleTypeId) {

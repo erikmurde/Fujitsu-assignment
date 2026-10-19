@@ -1,7 +1,10 @@
 package com.fujitsu.app.controller;
 
 import com.fujitsu.app.domain.RegionalBaseFee;
+import com.fujitsu.app.domain.exception.AppException;
 import com.fujitsu.app.service.RegionalFeeService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +39,9 @@ public class RegionalFeeController {
      */
     @GetMapping("api/regional-fee/{id}")
     public RegionalBaseFee getById(@PathVariable Long id) {
-        return service.getById(id);
+        return service
+                .getById(id)
+                .orElseThrow(() -> new AppException("No regional fee with given id", HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -46,7 +51,7 @@ public class RegionalFeeController {
      * @return id of created object
      */
     @PostMapping("api/regional-fee")
-    public Long add(@RequestBody RegionalBaseFee fee) {
+    public Long add(@RequestBody @Valid RegionalBaseFee fee) {
         return service.create(fee);
     }
 
@@ -57,7 +62,7 @@ public class RegionalFeeController {
      * @param fee values to replace in existing object
      */
     @PutMapping("api/regional-fee/{id}")
-    public void update(@PathVariable Long id, @RequestBody RegionalBaseFee fee) {
+    public void update(@PathVariable Long id, @RequestBody @Valid RegionalBaseFee fee) {
         service.update(id, fee);
     }
 
