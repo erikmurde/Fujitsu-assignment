@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Service for retrieving and managing data related to weather observations.
+ * Service for managing data related to weather observations.
  */
 @Service
 public class ObservationService {
