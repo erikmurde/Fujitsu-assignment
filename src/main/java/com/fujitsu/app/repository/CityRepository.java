@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Repository for fetching City objects from database.
+ * Repository managing database operations for cities.
  */
 @Repository
 public interface CityRepository extends CrudRepository<City, Long> {
