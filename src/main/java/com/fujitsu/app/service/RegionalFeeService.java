@@ -5,6 +5,7 @@ import com.fujitsu.app.domain.exception.AppException;
 import com.fujitsu.app.repository.CityRepository;
 import com.fujitsu.app.repository.RegionalBaseFeeRepository;
 import com.fujitsu.app.repository.VehicleTypeRepository;
+import com.fujitsu.app.service.base.CrudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
  * Service for managing data related to regional base fees.
  */
 @Service
-public class RegionalFeeService {
+public class RegionalFeeService implements CrudService<RegionalBaseFee> {
 
     private final RegionalBaseFeeRepository regionalBaseFeeRepository;
 

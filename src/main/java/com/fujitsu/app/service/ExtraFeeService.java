@@ -5,6 +5,7 @@ import com.fujitsu.app.domain.Observation;
 import com.fujitsu.app.domain.exception.AppException;
 import com.fujitsu.app.repository.ExtraFeeRepository;
 import com.fujitsu.app.repository.VehicleTypeRepository;
+import com.fujitsu.app.service.base.CrudService;
 import org.springframework.expression.ExpressionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.Optional;
  * Service for managing extra fees related to weather conditions.
  */
 @Service
-public class ExtraFeeService {
+public class ExtraFeeService implements CrudService<ExtraFee> {
 
     private final ExtraFeeRepository extraFeeRepository;
 
