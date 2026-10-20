@@ -1,9 +1,13 @@
 package com.fujitsu.app.controller;
 
+import com.fujitsu.app.domain.Observation;
 import com.fujitsu.app.service.DeliveryFeeService;
+import com.fujitsu.app.service.ObservationService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 /**
  * Controller for requesting delivery fees.
@@ -13,8 +17,11 @@ public class DeliveryFeeController {
 
     private final DeliveryFeeService deliveryFeeService;
 
-    public DeliveryFeeController(DeliveryFeeService deliveryFeeService) {
+    private final ObservationService observationService;
+
+    public DeliveryFeeController(DeliveryFeeService deliveryFeeService, ObservationService observationService) {
         this.deliveryFeeService = deliveryFeeService;
+        this.observationService = observationService;
     }
 
     /**
@@ -26,6 +33,8 @@ public class DeliveryFeeController {
      */
     @GetMapping("api/delivery-fee")
     public Double calculateDeliveryFee(@RequestParam String city, @RequestParam String vehicle) {
-        return deliveryFeeService.calculateDeliveryFee(city, vehicle);
+        Optional<Observation> observation = observationService.getLatestObservation(city);
+
+        return deliveryFeeService.calculateDeliveryFee(city, vehicle, observation);
     }
 }

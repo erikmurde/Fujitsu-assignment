@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository managing database operations for regional base fees.
+ */
 @Repository
 public interface RegionalBaseFeeRepository extends CrudRepository<RegionalBaseFee, Long> {
 

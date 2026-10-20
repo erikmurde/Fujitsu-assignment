@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+/**
+ * Object representing a base delivery fee for a location and vehicle combination.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

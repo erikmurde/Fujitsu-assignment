@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+/**
+ * Object representing a vehicle type.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
