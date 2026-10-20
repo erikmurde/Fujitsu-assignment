@@ -83,4 +83,17 @@ public class TestDataFactory {
     public static ExtraFee createExtraFee(String condition, double amount, String errorMessage) {
         return new ExtraFee(null, null, condition, amount, errorMessage);
     }
+
+    /**
+     * Creates a test ExtraFee object with hardcoded values.
+     *
+     * @return created ExtraFee object
+     */
+    public static ExtraFee createExtraFee() {
+        ExtraFee fee = createExtraFee("windSpeed > 5", 10, "");
+        fee.setId(1L);
+        fee.setVehicleTypeId(1L);
+
+        return fee;
+    }
 }
