@@ -4,6 +4,7 @@ import com.fujitsu.app.BaseTest;
 import com.fujitsu.app.domain.RegionalBaseFee;
 import org.junit.jupiter.api.Test;
 
+import static com.fujitsu.app.factory.TestDataFactory.createRegionalBaseFee;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,9 +104,5 @@ public class RegionalBaseFeeControllerTest extends BaseTest {
     void testDeleteNotFound() throws Exception {
         performDelete(PATH_WITH_ID, 100L)
                 .andExpect(status().isNotFound());
-    }
-
-    private static RegionalBaseFee createRegionalBaseFee() {
-        return new RegionalBaseFee(1L, 1L, 1L, 10);
     }
 }
