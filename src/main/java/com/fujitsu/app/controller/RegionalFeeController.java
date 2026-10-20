@@ -45,7 +45,7 @@ public class RegionalFeeController {
     }
 
     /**
-     * Endpoint for creating a new regional base fee.
+     * Endpoint for creating a new regional base fee with the provided values.
      *
      * @param fee values to add to new object
      * @return id of created object

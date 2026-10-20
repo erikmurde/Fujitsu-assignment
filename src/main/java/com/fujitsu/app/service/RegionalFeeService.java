@@ -65,6 +65,8 @@ public class RegionalFeeService {
      * @return id of created object
      */
     public Long create(RegionalBaseFee fee) {
+        fee.setId(null);
+
         validateCity(fee.getCityId());
         validateVehicleType(fee.getVehicleTypeId());
 
