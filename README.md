@@ -13,3 +13,8 @@ Use [this link](http://localhost:8080/swagger-ui/index.html#/) to access the RES
 ```shell
 ./gradlew test
 ```
+
+### Extra information
+The IDE used was IntelliJ IDEA.  
+Gradle was used as the build tool.  
+Spring Initializr was used to create the initial project.
