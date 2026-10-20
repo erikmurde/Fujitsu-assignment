@@ -1,6 +1,9 @@
 package com.fujitsu.app.domain;
 
 import com.fujitsu.app.domain.exception.AppException;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +27,20 @@ public class ExtraFee {
     @Id
     private Long id;
 
+    @NotNull
+    @Min(1)
     private Long vehicleTypeId;
 
+    @NotNull
+    @Size(min = 1, max = 512)
     private String condition;
 
+    @NotNull
+    @Min(0)
     private double amount;
 
+    @NotNull
+    @Size(max = 255)
     private String errorMessage;
 
     /**
