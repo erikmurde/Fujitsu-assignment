@@ -1,5 +1,6 @@
 package com.fujitsu.app.factory;
 
+import com.fujitsu.app.domain.ExtraFee;
 import com.fujitsu.app.domain.Observation;
 import com.fujitsu.app.domain.RegionalBaseFee;
 
@@ -11,7 +12,7 @@ import java.time.Instant;
 public class TestDataFactory {
 
     /**
-     * Create a test Observation object with given values (and some hardcoded ones).
+     * Creates a test Observation object with given values (and some hardcoded ones).
      *
      * @param airTemperature temperature of observation
      * @param windSpeed wind speed of observation
@@ -33,7 +34,7 @@ public class TestDataFactory {
     }
 
     /**
-     * Create a test Observation object with a given weather phenomenon.
+     * Creates a test Observation object with a given weather phenomenon.
      *
      * @param phenomenon weather phenomenon of observation
      * @return created Observation object
@@ -43,7 +44,7 @@ public class TestDataFactory {
     }
 
     /**
-     * Create a test Observation object with a given temperature.
+     * Creates a test Observation object with a given temperature.
      *
      * @param airTemperature temperature of observation
      * @return created Observation object
@@ -53,7 +54,7 @@ public class TestDataFactory {
     }
 
     /**
-     * Create a test Observation object with a given wind speed.
+     * Creates a test Observation object with a given wind speed.
      *
      * @param windSpeed wind speed of observation
      * @return created Observation object
@@ -63,11 +64,23 @@ public class TestDataFactory {
     }
 
     /**
-     * Create a test RegionalBaseFee object with hardcoded values.
+     * Creates a test RegionalBaseFee object with hardcoded values.
      *
      * @return created RegionalBaseFee object
      */
     public static RegionalBaseFee createRegionalBaseFee() {
         return new RegionalBaseFee(1L, 1L, 1L, 10);
+    }
+
+    /**
+     * Creates a test ExtraFee object with given values.
+     *
+     * @param condition business rule to evaluate weather observations against
+     * @param amount extra fee to add to delivery fee total
+     * @param errorMessage message to show in case matching the condition requires an error to be thrown
+     * @return created ExtraFee object
+     */
+    public static ExtraFee createExtraFee(String condition, double amount, String errorMessage) {
+        return new ExtraFee(null, null, condition, amount, errorMessage);
     }
 }
