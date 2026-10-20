@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.Instant;
+
 import static com.fujitsu.app.factory.TestDataFactory.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -178,6 +180,28 @@ class DeliveryFeeControllerTest extends BaseTest {
 		);
 		performOk(TARTU, BIKE)
 				.andExpect(content().string("4.0"));
+	}
+
+	@Test
+	void testOptionalDatetime() throws Exception {
+		String oldTime = "2026-10-05T00:00:00Z";
+		String newTime = "2026-10-10T00:00:00Z";
+
+		Observation oldObservation = createObservationPhenomenon("Clear");
+		Observation newObservation = createObservationPhenomenon("Moderate snowfall");
+
+		oldObservation.setTimestamp(Instant.parse(oldTime).getEpochSecond());
+		newObservation.setTimestamp(Instant.parse(newTime).getEpochSecond());
+
+		repository.save(oldObservation);
+		repository.save(newObservation);
+
+		performGet(PATH + "&datetime={datetime}", TARTU, BIKE, oldTime)
+				.andExpect(status().isOk())
+				.andExpect(content().string("2.5"));
+
+		performOk(TARTU, BIKE)
+				.andExpect(content().string("3.5"));
 	}
 
 	private ResultActions performOk(String city, String vehicle) throws Exception {

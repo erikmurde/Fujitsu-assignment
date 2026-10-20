@@ -3,10 +3,14 @@ package com.fujitsu.app.controller;
 import com.fujitsu.app.domain.Observation;
 import com.fujitsu.app.domain.exception.AppException;
 import com.fujitsu.app.service.ObservationService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
+import java.util.Optional;
 
 /**
  * Controller for managing weather observations.
@@ -27,9 +31,12 @@ public class ObservationController {
      * @return latest weather observation in the given city
      */
     @GetMapping("api/observations/latest")
-    public Observation getLatestObservation(@RequestParam String city) {
+    public Observation getLatestObservation(
+            @RequestParam String city,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Optional<Date> datetime
+    ) {
         return service
-                .getLatestObservation(city)
+                .getLatestObservation(city, datetime)
                 .orElseThrow(() -> new AppException("No observations found", HttpStatus.NOT_FOUND));
     }
 }

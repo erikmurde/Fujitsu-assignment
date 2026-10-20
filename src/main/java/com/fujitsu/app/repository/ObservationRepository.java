@@ -18,5 +18,15 @@ public interface ObservationRepository extends CrudRepository<Observation, Long>
             "WHERE name = :name " +
             "AND TIMESTAMP = (SELECT MAX(timestamp) FROM OBSERVATION WHERE name = :name)"
     )
-    Optional<Observation> findLatestObservation(@Param("name") String name);
+    Optional<Observation> findLatest(@Param("name") String name);
+
+    @Query("SELECT * FROM OBSERVATION " +
+            "WHERE name = :name " +
+            "AND TIMESTAMP = (SELECT MAX(timestamp) FROM OBSERVATION " +
+            "WHERE name = :name " +
+            "AND timestamp <= :timestamp)"
+    )
+    Optional<Observation> findLatestBeforeTimestamp(
+            @Param("name") String name,
+            @Param("timestamp") long timestamp);
 }

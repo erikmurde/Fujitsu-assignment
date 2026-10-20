@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -43,9 +44,10 @@ public class ObservationService {
      * Method for retrieving the latest weather observation in the given city.
      *
      * @param city location of the observation
+     * @param datetime specifies the latest possible time of the returned observation
      * @return latest weather observation in the city
      */
-    public Optional<Observation> getLatestObservation(String city) {
+    public Optional<Observation> getLatestObservation(String city, Optional<Date> datetime) {
         String name = city;
 
         for (String nameFromMap: OBSERVATION_TO_CITY_MAP.keySet()) {
@@ -53,7 +55,11 @@ public class ObservationService {
                 name = nameFromMap;
             }
         }
-        return observationRepository.findLatestObservation(name);
+        if (datetime.isEmpty()) {
+            return observationRepository.findLatest(name);
+        }
+        long timestamp = datetime.get().getTime() / 1000;
+        return observationRepository.findLatestBeforeTimestamp(name, timestamp);
     }
 
     /**
